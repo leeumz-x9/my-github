@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import Menu from './pages/Menu';
+import Cart from './pages/Cart';
 
-function App() {
+const App = () => {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [cartItems, setCartItems] = useState([]);
+
+  const handleAddToCart = (item) => {
+    setCartItems([...cartItems, item]);
+    alert(`${item.name} added to cart!`);
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'menu':
+        return <Menu onAddToCart={handleAddToCart} />;
+      case 'cart':
+        return <Cart cartItems={cartItems} />;
+      default:
+        return <Home />;
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar onNavigate={setCurrentPage} />
+      {renderPage()}
+      <Footer />
     </div>
   );
-}
+};
 
 export default App;
